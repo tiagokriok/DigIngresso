@@ -1,0 +1,100 @@
+{% extends "func/dashboard.html"%}
+
+{% block body %}
+{% if add_evt%}
+<br>
+<h1 class="h2 text-center">Cadastrar Evento</h1>
+<hr class="intro-divider">
+<form method="POST" enctype="multipart/form-data">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            {{form.nome.label()}}
+            {{form.nome(class="form-control", autofocus=true, maxlength="30")}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.data_inicio.label()}}
+            {{form.data_inicio(id="data_ini", class="form-control")}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.hora_inicio.label()}}
+            {{form.hora_inicio(id="hora_ini", class="form-control")}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.hora_final.label()}}
+            {{form.hora_final(id="hora_fim", class="form-control")}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.estilo.label()}}
+            {{form.estilo(class="form-control")}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.empresa.label()}}
+            {{form.empresa(class="form-control")}}
+        </div>
+        {{form.descricao.label()}}
+        {{form.descricao(class="form-control", style="resize: none", maxlength="100")}}
+        <div class="form-group col-md-6">
+            <label>Imagem do Evento</label>
+            <input type="file" class="form-control-file" name="image">
+        </div>
+    </div>
+    <br>
+    <div class="form-group">
+        {{form.submit(class="btn btn-success", value="Salvar")}}
+        <a class="btn btn-secondary" href="{{url_for('func.dashboard')}}">Cancelar</a>
+    </div>
+</form>
+{% else %}
+<br>
+<h1 class="h2 text-center">Alterar Evento</h1>
+<hr class="intro-divider">
+<form method="POST">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            {{form.nome.label()}}
+            {{form.nome(class="form-control", value=form.nome.data, maxlength="30")}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.data_inicio.label()}}
+            {{form.data_inicio(id="data_ini", class="form-control", value=form.data_inicio.data)}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.hora_inicio.label()}}
+            {{form.hora_inicio(id="hora_ini", class="form-control", value=form.hora_inicio.data)}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.hora_final.label()}}
+            {{form.hora_final(id="hora_fim", class="form-control", value=form.hora_final.data)}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.estilo.label()}}
+            {{form.estilo(class="form-control")}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.empresa.label()}}
+            {{form.empresa(class="form-control")}}
+        </div>
+        {{form.descricao.label()}}
+        {{form.descricao(class="form-control", value=form.descricao.data, style="resize: none", maxlength="100")}}
+    </div>
+    <br>
+    <div class="form-group">
+        {{form.submit(class="btn btn-success", value="Salvar")}}
+        <a class="btn btn-secondary" href="{{url_for('func.pesquisar_evt')}}">Cancelar</a>
+    </div>
+</form>
+{% endif %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#data_ini").mask("00/00/0000", {
+            placeholder: "__/__/____"
+        })
+        $("#hora_ini").mask("00:00", {
+            placeholder: "__:__"
+        })
+        $("#hora_fim").mask("00:00", {
+            placeholder: "__:__"
+        })
+    });
+</script>
+{% endblock %}

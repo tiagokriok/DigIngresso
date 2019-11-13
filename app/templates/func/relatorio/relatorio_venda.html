@@ -1,0 +1,107 @@
+{% extends "func/dashboard.html"%}
+{% block head %}
+<script src="{{url_for('static', filename='js/Chart.min.js')}}"></script>
+{% endblock %}
+
+{% block body %}
+{% if pesq %}
+<br>
+<form class="form-inline" method="POST">
+    <div class="form-group mx-sm-3 mb-10">
+        {{form.empresa.label()}}
+        {{form.empresa(class="form-control")}}
+    </div>
+    {{form.gerar(class="btn btn-primary", value="Gerar Relatório")}}
+</form>
+<hr class="intro-divider">
+<h1 class="h2 text-center">Relatório de Venda {{nome}}</h1>
+<hr class="intro-divider">
+<canvas id="rela-emp" width="600" height="400"></canvas>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Nome Evento</th>
+            <th scope="col">Total</th>
+        </tr>
+    </thead>
+    <tbody id="rela">
+    </tbody>
+</table>
+<button id="imp" type="button" class="btn btn-primary btn-lg btn-block" onclick="window.print()">Imprimir <span
+        class="fas fa-print"></span></button>
+<script>
+    $(document).ready(function () {
+        let evt = {{evt | safe}};
+        let total = {{total}};
+        let tamanho = evt.length;
+        let tb = document.getElementById('rela');
+        for (let i = 0; i < tamanho; i++) {
+            let row = tb.insertRow(0);
+            let nome = row.insertCell(0);
+            let venda = row.insertCell(1);
+            row.classList.add('table-active');
+            nome.innerHTML = evt[i];
+            venda.innerHTML = "R$ " + total[i];
+        }
+
+    });
+
+    Chart.defaults.global.responsive = false;
+    let ctx = document.getElementById('rela-emp').getContext('2d');
+    let myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{evt | safe}},
+            datasets: [{
+                label: 'Vendas por Evento',
+                data: {{total}},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(99, 21, 167, 0.2)',
+                    'rgba(106, 36, 65, 0.2)',
+                    'rgba(240, 124, 26, 0.2)',
+                    'rgba(45,247,242, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(99, 21, 167, 1)',
+                    'rgba(106, 36, 65, 1)',
+                    'rgba(240, 124, 26, 1)',
+                    'rgba(45,247,242, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+{% else %}
+<br>
+<form class="form-inline" method="POST">
+    <div class="form-group mx-sm-3 mb-10">
+        {{form.empresa.label()}}
+        {{form.empresa(class="form-control")}}
+    </div>
+    {{form.gerar(class="btn btn-primary", value="Gerar Relatório")}}
+</form>
+<hr class="intro-divider">
+{% endif %}
+{% endblock %}

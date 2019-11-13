@@ -1,0 +1,89 @@
+{% extends "func/dashboard.html"%}
+
+{% block head %}
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery.quicksearch.js')}}"></script>
+{% endblock %}
+{% block body %}
+{% if tings%}
+<br>
+<form method="POST">
+    <div class="input-group mb-3">
+        <input id="pesq_ting" name="pesq_ting" type="text" class="form-control"
+            placeholder="Pesquisar Nome do Tipo de Ingresso" aria-label="Pesquisar Nome do Tipo de Ingresso"
+            aria-describedby="basic-addon2" autofocus autocomplete="off">
+        <div class="input-group-append">
+            <button class="btn btn-outline-primary" type="submit">Pesquisar</button>
+        </div>
+    </div>
+</form>
+<table id="tab_ting" class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Tipo de Ingresso</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Alterar/Excluir</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ting in tings %}
+        <tr class="table-light">
+            <td>{{ting.nome}}</td>
+            <td>{{ting.valor}}</td>
+            <td>{{ting.lote}}</td>
+            <td><a class="btn btn-warning" href="{{url_for('func.alterar_ting', id=ting.id)}}"><span class="fas fa-edit"></span></a>
+                <a class="btn btn-danger" href="#" data-ting="{{ting.id}}" onclick="ConfirmaDel(this)"><span
+                        class="fas fa-trash-alt"></span></a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<br>
+<form method="POST">
+    <div class="input-group mb-3">
+        <input id="pesq_ting" name="pesq_ting" type="text" class="form-control"
+            placeholder="Pesquisar Nome do Tipo de Ingresso" aria-label="Pesquisar Nome do Tipo de Ingresso"
+            aria-describedby="basic-addon2" autofocus autocomplete="off">
+        <div class="input-group-append">
+            <button class="btn btn-outline-primary" type="submit">Pesquisar</button>
+        </div>
+    </div>
+</form>
+<hr class="intro-divider">
+{% endif %}
+<div id="ExcTing" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Excluir Tipo de Ingresso</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-form-label">Tem certeza que deseja excluir o Tipo de Ingresso?</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form id="formDel" method="POST">
+                    <button type="button" class="btn btn-danger" onclick="Delete()">Excluir</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('input#pesq_ting').quicksearch('table#tab_ting tbody tr');
+
+    function ConfirmaDel(elem) {
+    localStorage.setItem('deleteId', $(elem).attr('data-ting'));
+    $('#ExcTing').modal();
+    }
+
+    function Delete() {
+    const form = document.getElementById('formDel');
+    form.action = 'deletar/'+localStorage.getItem('deleteId');
+    form.submit();
+    }
+</script>
+{% endblock %}

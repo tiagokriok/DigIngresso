@@ -1,0 +1,90 @@
+{% extends "func/dashboard.html"%}
+
+{% block head %}
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery.quicksearch.js')}}"></script>
+{% endblock %}
+{% block body %}
+{% if evts%}
+<br>
+<form method="POST">
+    <div class="input-group mb-3">
+        <input id="pesq_evt" name="pesq_evt" type="text" class="form-control" placeholder="Pesquisar Nome do Evento"
+            aria-label="Pesquisar Nome do Evento" aria-describedby="basic-addon2" autofocus autocomplete="off">
+        <div class="input-group-append">
+            <button class="btn btn-outline-primary" type="submit">Pesquisar</button>
+        </div>
+    </div>
+</form>
+<table id="tab_evt" class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Nome do Evento</th>
+            <th scope="col">Data</th>
+            <th scope="col">Hora Inicio</th>
+            <th scope="col">Hora Final</th>
+            <th scope="col">Alterar/Excluir</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for evt in evts %}
+        <tr class="table-light">
+            <td>{{evt.nomeevento}}</td>
+            <td>{{date.strftime(evt.data_inicio, '%d/%m/%Y')}}</td>
+            <td>{{evt.hora_inicio}}</td>
+            <td>{{evt.hora_final}}</td>
+            <td><a class="btn btn-warning" href="{{url_for('func.alterar_evt', id=evt.id)}}"><span
+                        class="fas fa-edit"></span></a>
+                <a class="btn btn-danger" href="#" data-evt="{{evt.id}}" onclick="ConfirmaDel(this)"><span
+                        class="fas fa-trash-alt"></span></a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<br>
+<form method="POST">
+    <div class="input-group mb-3">
+        <input id="pesq_evt" name="pesq_evt" type="text" class="form-control" placeholder="Pesquisar Nome do Evento"
+            aria-label="Pesquisar Nome do Evento" aria-describedby="basic-addon2" autofocus autocomplete="off">
+        <div class="input-group-append">
+            <button class="btn btn-outline-primary" type="submit">Pesquisar</button>
+        </div>
+    </div>
+</form>
+<hr class="intro-divider">
+{% endif %}
+<div id="ExcEvt" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Excluir Evento</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-form-label">Tem certeza que deseja excluir o Evento?</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form id="formDel" method="POST">
+                    <button type="button" class="btn btn-danger" onclick="Delete()">Excluir</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('input#pesq_evt').quicksearch('table#tab_evt tbody tr');
+
+    function ConfirmaDel(elem) {
+    localStorage.setItem('deleteId', $(elem).attr('data-evt'));
+    $('#ExcEvt').modal();
+    }
+
+    function Delete() {
+    const form = document.getElementById('formDel');
+    form.action = 'deletar/'+localStorage.getItem('deleteId');
+    form.submit();
+    }
+</script>
+{% endblock %}

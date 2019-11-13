@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<style>
+    .jumbotron {
+        background-image: url("{{url_for('static', filename='img/home3.jpg')}}");
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+</style>
+<div class="jumbotron jumbotron-fluid text-center">
+    <div class="container-fluid">
+        <h1 class="display-3 text-white">DigIngresso</h1>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="{{url_for('home.eventos')}}" role="button">Ver Eventos</a>
+        </p>
+    </div>
+</div>
+{% if evts %}
+<div class="container">
+    <div>
+        <div class="row">
+            {% for evt in evts %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img class="card-img-top" src="/static/img/{{evt.image}}"
+                        alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{evt.nomeevento}}</h5>
+                        <p class="card-text">{{evt.descricao}}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a class="btn btn-sm btn-outline-secondary"
+                                    href="{{url_for('home.detalhe_evento', id=evt.id)}}">Ver</a>
+                            </div>
+                            <small class="text-muted">{{date.strftime(evt.data_inicio, '%d/%m/%Y')}}</small>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container">
+    <h1>Nenhum evento no dia de hoje!</h1>
+</div>
+{% endif %}
+{% endblock %}

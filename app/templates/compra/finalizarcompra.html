@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block head %}
+<script src="https://assets.pagar.me/checkout/1.1.0/checkout.js"></script>
+{% endblock %}
+{% block body %}
+<style>
+    .jumbotron {
+        background-image: url("{{url_for('static', filename='img/home3.jpg')}}");
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+</style>
+<div class="jumbotron jumbotron-fluid text-center">
+    <div class="container-fluid">
+        <h1 class="display-3 text-white">Carrinho</h1>
+    </div>
+</div>
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Ingresso</th>
+                <th scope="col">Quantidade</th>
+                <th scope="col">Preço</th>
+                <th scope="col">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody id="compratab">
+
+        </tbody>
+    </table>
+    <!-- <h6 id="total" class="text-center" style="left: 50%">Total</h6> -->
+    <button id="pay-button" class="btn btn-primary btn-lg btn-block">Finalizar Compra</button>
+</div>
+<script>
+    $(document).ready(function () {
+        const carrinho = JSON.parse(localStorage.getItem('carrinho'));
+        let tab = document.getElementById('compratab');
+        for (c in carrinho) {
+            if (c != 'Total' && c != 'Evento') {
+                let row = tab.insertRow(0);
+                let nome = row.insertCell(0);
+                let qtd = row.insertCell(1);
+                let valor = row.insertCell(2);
+                let vtotal = row.insertCell(3);
+                row.classList.add('table-active');
+                nome.innerHTML = carrinho[c]["nome"];
+                qtd.innerHTML = carrinho[c]["qtd"];
+                valor.innerHTML = "R$" + carrinho[c]["valor"];
+                vtotal.innerHTML = "R$" + carrinho[c]["valorTotal"];
+            }
+        }
+        let total = $('#pay-button');
+        // console.log(carrinho.Total);
+        total.text('Finalizar Compra - Total R$ ' + carrinho.Total);
+
+    });
+
+    let button = document.getElementById('pay-button');
+    const carrinho = JSON.parse(localStorage.getItem('carrinho'));
+    const pagar = carrinho.Total * 100;
+
+    // Abrir o modal ao clicar no botão
+    button.addEventListener('click', function () {
+
+        // inicia a instância do checkout
+        let checkout = new PagarMeCheckout.Checkout({
+            encryption_key: 'ek_test_e2fhi0pRO9FDEoqWYJrKjwzelRlkx2',
+            success: function (data) {
+                console.log(data);
+                console.log('----------OK----------')
+                $.ajax({
+                    type: "POST",
+                    url: "/realizarcompra",
+                    data: JSON.stringify(carrinho),
+                    contentType: "application/json",
+                    dataType: "json"
+                });
+                localStorage.clear()
+                window.location = "http://127.0.0.1:5000/ingresso/{{session.CPF}}";
+            },
+            error: function (err) {
+                console.log(err);
+                console.log('----------ERRO----------')
+            },
+            close: function () {
+                console.log('The modal has been closed.');
+                console.log('----------CLOSE----------')
+            }
+        });
+
+        // Obs.: é necessário passar os valores boolean como string
+        checkout.open({
+            amount: pagar,
+            buttonText: 'Finalizar Compra',
+            customerData: 'false',
+            createToken: 'true',
+            paymentMethods: 'credit_card'
+        });
+    });
+</script>
+{% endblock %}

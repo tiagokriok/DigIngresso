@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{url_for('home.pagprincipal')}}">DigIngresso</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+        aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor02">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('home.pagprincipal')}}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('home.eventos')}}">Eventos</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav navbar-right">
+            {% if current_user.is_authenticated %}
+            {% if session.Func %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('func.dashboard')}}">Dashboard</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('compra.finalizar_compra')}}"><span
+                        class="fa fa-shopping-cart"></span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">{{current_user.username}}</a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('aute.logout')}}">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('aute.registro')}}">Registrar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('aute.login')}}">Login</a>
+            </li>
+            {% endif %}
+
+        </ul>
+    </div>
+</nav>

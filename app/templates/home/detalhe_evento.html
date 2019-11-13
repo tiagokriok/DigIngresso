@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<style>
+    .jumbotron {
+        background-image: url("{{url_for('static', filename='img/home3.jpg')}}");
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+</style>
+<div class="jumbotron jumbotron-fluid text-center">
+    <div class="container-fluid"></div>
+        <h1 class="display-3 text-white">{{evt.nomeevento}}</h1>
+    </div>
+</div>
+<div class="container">
+    <div class="row featurette">
+        <div class="col-md-7">
+            <h2 class="featurette-heading">{{evt.nomeevento}}</h2>
+            <p class="lead">{{evt.descricao}}</p>
+            <p class="lead">{{emp.nomefantasia}}</p>
+            <p class="lead">Endereço: {{end.rua}}, {{end.numero}}, {{end.bairro}}</p>
+            <p class="lead">{{emp.descricao}}</p>
+        </div>
+        <div class="col-md-5">
+            <p class="lead">Data: {{date.strftime(evt.data_inicio, '%d/%m/%Y')}}</p>
+            <p class="lead">Hora de Início: {{time.strftime(evt.hora_inicio, '%H:%M')}}</p>
+            <p class="lead">Hora de Término: {{time.strftime(evt.hora_final, '%H:%M')}}</p>
+        </div>
+        <div class="form-group col-md-4">
+            <form>
+                <h3 class="control-label">Ingressos</h3>
+                <hr class="featurette-divider">
+                {% for t in ting %}
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">{{t.nome}}: R${{t.valor}}</span>
+                        </div>
+                        <input id="{{t.id}}" type="number" class="form-control" min="0" max="{{t.lote}}"
+                            style="text-align: center;">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-primary"
+                                onclick="add({{t.id}}, {{t.valor}}, '{{t.nome}}')"><span
+                                    class="fas fa-plus"></span></button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-4 order-md-2 mb-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span>Carrinho</span>
+            </h4>
+            <ul id="cart" class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><strong>Total</strong></span>
+                    <strong>R$<span id="total">0</span></strong>
+                    <form method="POST">
+                        <a href="{{url_for('compra.finalizar_compra')}}" class="btn btn-primary" onclick="saveJson()">Comprar</a>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $("[type='number']").keypress(function (evt) {
+        evt.preventDefault();
+    });
+    const carrinho = {};
+    carrinho["Evento"] = {{evt.id}};
+
+    function add(id, valor, nome) {
+        const qtd = document.getElementById(id).value;
+        const max = document.getElementById(id).getAttribute("max");
+        const total = parseFloat(document.getElementById("total").innerHTML);
+        if (qtd > 0 && parseInt(max) >= qtd) {
+
+            if (document.getElementById(nome)) {
+                const valor_old = parseFloat(document.getElementById(nome).getAttribute("data-valor"));
+                const valor_new = valor_old + valor * qtd;
+                document.getElementById(nome).setAttribute("data-valor", valor_new);
+                document.getElementById(nome).innerHTML = String("R$" + valor_new);
+                document.getElementById("total").innerHTML = total + (valor * qtd);
+                if (carrinho.hasOwnProperty(id)) {
+                    carrinho[id]["qtd"] = carrinho[id]["qtd"] + parseInt(qtd);
+                    carrinho[id]["valorTotal"] = carrinho[id]["valorTotal"] + parseInt(qtd) * valor;
+                    carrinho["Total"] = total + (valor * qtd);
+                    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+                }
+            } else {
+                var li = document.createElement('LI');
+                var div = document.createElement('DIV');
+                var h = document.createElement('H6');
+                var s = document.createElement('SPAN');
+                var minus = document.createElement('SPAN');
+                var btn = document.createElement('BUTTON');
+
+                btn.onclick = function del(btn) {
+                    let total = parseFloat(document.getElementById("total").innerHTML);
+                    let cod = parseInt(this.getAttribute("data-id"));
+                    carrinho["Total"] = total - carrinho[cod]["valorTotal"];
+                    document.getElementById("total").innerHTML = total - carrinho[cod]["valorTotal"];
+                    delete carrinho[cod];
+                    this.parentNode.remove();
+                };
+
+                carrinho[id] = {
+                    "nome": nome,
+                    "qtd": parseInt(qtd),
+                    "valor": valor,
+                    "valorTotal": qtd * valor
+                };
+
+                carrinho["Total"] = total + carrinho[id]["valorTotal"]
+
+                btn.setAttribute("data-id", id);
+                h.innerHTML = nome;
+                s.innerHTML = String("R$" + carrinho[id]["valorTotal"]);
+                s.setAttribute("id", nome);
+                s.setAttribute("data-valor", carrinho[id]["valorTotal"]);
+                document.getElementById("total").innerHTML = carrinho["Total"];
+
+                li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'lh-condensed');
+                h.classList.add('my-0');
+                s.classList.add('text-muted');
+                minus.classList.add('fas', 'fa-minus');
+                btn.classList.add('btn', 'btn-outline-danger');
+
+                cart.insertBefore(li, cart.childNodes[0]);
+                li.insertBefore(div, li.childNodes[0]);
+                div.insertBefore(h, div.childNodes[0]);
+                li.appendChild(s);
+                li.appendChild(btn);
+                btn.appendChild(minus);
+            }
+            document.getElementById(id).value = "";
+            // new_max = max - qtd;
+            // document.getElementById(id).setAttribute("max", new_max);
+            // console.log(new_max);
+        }
+    }
+
+    function saveJson(){
+        localStorage.setItem("carrinho", JSON.stringify(carrinho));
+    }
+
+    // function sendJson() {
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/carrinho",
+    //         data: JSON.stringify(carrinho),
+    //         contentType: "application/json",
+    //         dataType: "json"
+    //     });
+    // }
+
+
+    // function del(btn) {
+    //     btn.parentNode.remove();
+    // }
+    //     function calcValor(qtd) {
+    //         console.log('a')
+    //         const cart = document.getElementById('cart');
+    //         if (document.getElementById('1')) {
+    //             var node = document.createElement('LI');
+    //             node.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'lh-condensed');
+    //             cart.insertBefore(node, cart.childNodes[0]);
+    //         }
+    // }
+</script>
+{% endblock %}

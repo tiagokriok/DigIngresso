@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block body %}
+<br>
+<div class="container">
+    <h1 class="h2 text-center">Evento: {{evt.nomeevento}}</h1>
+    <hr class="intro-divider">
+    <div class="row featurette">
+        <!-- <div class="col-md-7">
+            <p><img src="{{qrcode(com.id)}}" class="img-thumbnail" style="width:170px;height:170px;margin-right:15px;">
+                ID: {{com.id}}|
+                VALOR: {{com.valor_total}}|
+                CPF: {{cli.cpf}}|
+                NOME: {{cli.nome}}
+            <
+        </div> -->
+        <div class="col-md-3">
+            <img src="{{qrcode(com.id)}}" class="img-thumbnail" style="width:170px;height:170px;margin-right:15px;">
+        </div>
+        <div class="col-md-3">
+            <p class="featurette-heading">Código Ingresso: {{com.id}}</p>
+            <p class="featurette-heading">CPF: {{cli.cpf}}</p>
+            <p class="featurette-heading">NOME: {{cli.nome}}</p>
+            <p class="featurette-heading">Data do Evento: {{date.strftime(evt.data_inicio, '%d/%m/%Y')}}</p>
+            <p class="featurette-heading">Hora de Início: {{time.strftime(evt.hora_inicio, '%H:%M')}}</p>
+            <p class="featurette-heading">Hora de Término: {{time.strftime(evt.hora_final, '%H:%M')}}</p>
+        </div>
+        <div class="col-md-3">
+            {% for i in ing %}
+            <p class="featurette-heading">Quantidade:{{i.qtd}} | Ingresso: {{i.nome}}</p>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+    <button id="imp" type="button" class="btn btn-primary btn-lg btn-block" onclick="window.print()">Imprimir <span
+            class="fas fa-print"></span></button>
+</div>
+<script>
+    $(document).ready(function () {
+        if (document.URL.indexOf("#") == -1) {
+            url = document.URL + "#loaded";
+            location = "#loaded";
+            location.reload(true);
+        }
+    });
+</script>
+{% endblock %}

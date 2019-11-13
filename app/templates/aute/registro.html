@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery.cpfcnpj.js')}}"></script>
+{% endblock %}
+
+{% block body %}
+<br>
+<h1 class="h2 text-center">Registre-se para um conta nova</h1>
+<hr class="intro-divider">
+<br>
+<div class="container">
+<form method="POST">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            {{form.nome.label()}}
+            {{form.nome(class="form-control")}}
+        </div>
+        <div class="form-group col-md-6 has-success has-danger">
+            {{form.cpf.label()}}
+            {{form.cpf(id="CPF", class="form-control")}}
+            <div class="valid-feedback">CPF válido!</div>
+            <div class="invalid-feedback">CPF inválido!</div>
+        </div>
+        <div class="form-group col-md-6">
+            {{form.data_nasc.label()}}
+            {{form.data_nasc(id="data_nasc", class="form-control")}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.email.label()}}
+            {{form.email(class="form-control")}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.username.label()}}
+            {{form.username(class="form-control")}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.senha.label()}}
+            {{form.senha(class="form-control")}}
+        </div>
+        <div class="form-group col-md-6">
+            {{form.confirma_senha.label()}}
+            {{form.confirma_senha(class="form-control")}}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            {{form.registrar(class="btn btn-success", id="btnReg")}}
+            <a class="btn btn-secondary" href="{{url_for('home.pagprincipal')}}">Cancelar</a>
+        </div>
+    </div>
+</form>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#CPF').cpfcnpj({
+            mask: true,
+            validate: 'cpf',
+            event: 'focusout',
+            handler: '#CPF',
+            ifValid: function (input) {
+                input.addClass("is-valid");
+                input.removeClass("is-invalid");
+                $('#btnReg').prop('disabled', false);
+            },
+            ifInvalid: function (input) {
+                input.removeClass("is-valid");
+                input.addClass("is-invalid");
+                $('#btnReg').prop('disabled', true);
+            }
+        });
+    });
+    $("#CPF").mask("000.000.000-00");
+    $("#data_nasc").mask("00/00/0000", {
+    placeholder: "__/__/____"
+    })
+</script>
+{% endblock %}

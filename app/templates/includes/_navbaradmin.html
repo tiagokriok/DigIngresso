@@ -1,0 +1,76 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{url_for('home.pagprincipal')}}">DigIngresso</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+        aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor02">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                    aria-expanded="false">Empresa</a>
+                <div class="dropdown-menu" x-placement="bottom-start"
+                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
+                    <a class="dropdown-item" href="{{url_for('func.cad_emp')}}">Cadastrar</a>
+                    <a class="dropdown-item" href="{{url_for('func.pesquisar_emp')}}">Pesquisar</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                    aria-expanded="false">Evento</a>
+                <div class="dropdown-menu" x-placement="bottom-start"
+                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
+                    <a class="dropdown-item" href="{{url_for('func.cad_evt')}}">Cadastrar</a>
+                    <a class="dropdown-item" href="{{url_for('func.pesquisar_evt')}}">Pesquisar</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                    aria-expanded="false">Estilo Musical</a>
+                <div class="dropdown-menu" x-placement="bottom-start"
+                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
+                    <a class="dropdown-item" href="{{url_for('func.cad_estilo')}}">Cadastrar</a>
+                    <a class="dropdown-item" href="{{url_for('func.listar_estilo')}}">Pesquisar</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                    aria-expanded="false">Tipo Ingresso</a>
+                <div class="dropdown-menu" x-placement="bottom-start"
+                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
+                    <a class="dropdown-item" href="{{url_for('func.cad_ting')}}">Cadastrar</a>
+                    <a class="dropdown-item" href="{{url_for('func.pesquisar_ting')}}">Pesquisar</a>
+                </div>
+            </li>
+            {% if session.Admin %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                    aria-expanded="false">Funcionário</a>
+                <div class="dropdown-menu" x-placement="bottom-start"
+                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
+                    <a class="dropdown-item" href="{{url_for('func.cad_func')}}">Cadastrar</a>
+                    <a class="dropdown-item" href="{{url_for('func.pesquisar_func')}}">Pesquisar</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                    aria-expanded="false">Relatórios</a>
+                <div class="dropdown-menu" x-placement="bottom-start"
+                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
+                    <a class="dropdown-item" href="{{url_for('func.rela_est')}}">Relatório de Estilo Musical</a>
+                    <a class="dropdown-item" href="{{url_for('func.rela_venda')}}">Relatório de Venda</a>
+                </div>
+            </li>
+            {% endif %}
+        </ul>
+        <ul class="navbar-nav navbar-right">
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('func.dashboard')}}">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('aute.logout')}}">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>

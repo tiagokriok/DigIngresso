@@ -1,0 +1,190 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+{% if category == 'func.cad_estilo'%}
+<div class="modal" id="modalCadEst">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Salvo com Sucesso!</h5>
+            </div>
+            <div class="modal-body">
+                <p>{{message}}</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" href="{{url_for(category)}}">Sim</a>
+                <a class="btn btn-secondary" data-dismiss="modal" href="{{url_for('func.dashboard')}}">Não</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var messages = "{{ get_flashed_messages(with_categories=true) }}";
+
+        if (typeof messages != 'undefined' && messages != '[]') {
+            $("#modalCadEst").modal('show');
+        };
+    });
+</script>
+{% elif category == 'func.cad_func'%}
+<div class="modal" id="modalCadFunc">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Salvo com Sucesso!</h5>
+            </div>
+            <div class="modal-body">
+                <p>{{message}}</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" href="{{url_for(category)}}">Sim</a>
+                <a class="btn btn-secondary" data-dismiss="modal" href="{{url_for('func.dashboard')}}">Não</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var messages = "{{ get_flashed_messages(with_categories=true) }}";
+
+        if (typeof messages != 'undefined' && messages != '[]') {
+            $("#modalCadFunc").modal('show');
+        };
+    });
+</script>
+{% elif category == 'func.cad_ting'%}
+<div class="modal" id="modalCadTing">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Salvo com Sucesso!</h5>
+            </div>
+            <div class="modal-body">
+                <p>{{message}}</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" href="{{url_for(category)}}">Sim</a>
+                <a class="btn btn-secondary" data-dismiss="modal" href="{{url_for('func.dashboard')}}">Não</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var messages = "{{ get_flashed_messages(with_categories=true) }}";
+
+        if (typeof messages != 'undefined' && messages != '[]') {
+            $("#modalCadTing").modal('show');
+        };
+    });
+</script>
+{% elif category == 'func.cad_emp'%}
+<div class="modal" id="modalCadEmp">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Salvo com Sucesso!</h5>
+            </div>
+            <div class="modal-body">
+                <p>{{message}}</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" href="{{url_for(category)}}">Sim</a>
+                <a class="btn btn-secondary" data-dismiss="modal" href="{{url_for('func.dashboard')}}">Não</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var messages = "{{ get_flashed_messages(with_categories=true) }}";
+
+        if (typeof messages != 'undefined' && messages != '[]') {
+            $("#modalCadEmp").modal('show');
+        };
+    });
+</script>
+{% elif category == 'func.cad_evt'%}
+<div class="modal" id="modalCadEvt">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Salvo com Sucesso!</h5>
+            </div>
+            <div class="modal-body">
+                <p>{{message}}</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" href="{{url_for(category)}}">Sim</a>
+                <a class="btn btn-secondary" data-dismiss="modal" href="{{url_for('func.dashboard')}}">Não</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var messages = "{{ get_flashed_messages(with_categories=true) }}";
+
+        if (typeof messages != 'undefined' && messages != '[]') {
+            $("#modalCadEvt").modal('show');
+        };
+    });
+</script>
+{% elif category == 'alterar' %}
+<div class="modal" id="modalAlt">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Alterado com Sucesso!</h5>
+            </div>
+            <div class="modal-body">
+                <p>{{message}}</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" href="#" data-dismiss="modal">OK</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var messages = "{{ get_flashed_messages(with_categories=true) }}";
+
+        if (typeof messages != 'undefined' && messages != '[]') {
+            $("#modalAlt").modal('show');
+        };
+    });
+</script>
+{% elif category == 'warning'%}
+<div class="modal" id="modalError">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger">ERRO!</h5>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-dismissible alert-warning">
+                    <h4 class="alert-heading">Erro!</h4>
+                    <p class="mb-0">{{message}}</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" href="#" data-dismiss="modal">OK</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var messages = "{{ get_flashed_messages(with_categories=true) }}";
+
+        if (typeof messages != 'undefined' && messages != '[]') {
+            $("#modalError").modal('show');
+        };
+    });
+</script>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endwith %}
